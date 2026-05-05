@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Side Hustle Profit Calculator</title>
+  <title>Are You Actually Making Money?</title>
 
   <style>
     body {
@@ -28,7 +28,14 @@
     h1 {
       font-size: 20px;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 15px;
     }
 
     label {
@@ -75,13 +82,31 @@
     }
 
     .message {
-      margin-top: 15px;
+      margin-top: 10px;
       font-weight: bold;
     }
 
     .low { color: #ef4444; }
     .good { color: #22c55e; }
     .mid { color: #facc15; }
+
+    .cta {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #cbd5f5;
+    }
+
+    .cta a {
+      display: inline-block;
+      margin-top: 8px;
+      color: #22c55e;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .cta a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
@@ -89,6 +114,7 @@
 
 <div class="container">
   <h1>💰 Are You Actually Making Money?</h1>
+  <div class="subtitle">Check your real profit after fees and expenses</div>
 
   <label>Price per job ($)</label>
   <input type="number" id="price" placeholder="e.g. 50">
@@ -110,6 +136,13 @@
     <div class="result-line">Net Profit: $<span id="profit"></span></div>
 
     <div class="message" id="message"></div>
+
+    <!-- 💰 MONEY SECTION -->
+    <div class="cta">
+      💡 Most people are undercharging and don’t realize it.<br>
+      👉 Want help increasing your income?<br>
+      <a href="#">Message me or stay tuned</a>
+    </div>
   </div>
 </div>
 
@@ -134,7 +167,7 @@ function calculate() {
     message.innerHTML = "⚠️ You're losing money. Increase your price or reduce expenses.";
     message.className = "message low";
   } else if (profit < 500) {
-    message.innerHTML = "⚠️ Profit is low. Consider raising your price.";
+    message.innerHTML = "⚠️ Profit is low. You are likely undercharging.";
     message.className = "message mid";
   } else {
     message.innerHTML = "✅ Strong profit. Keep going!";
