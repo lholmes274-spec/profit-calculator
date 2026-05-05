@@ -90,16 +90,17 @@
     .good { color: #22c55e; }
     .mid { color: #facc15; }
 
-    .insight {
+    .cta {
       margin-top: 15px;
       font-size: 13px;
       color: #cbd5f5;
     }
 
-    .insight strong {
-      color: #22c55e;
+    .cta strong {
       display: block;
-      margin-top: 8px;
+      margin-top: 10px;
+      color: #22c55e;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -122,6 +123,10 @@
   <label>Platform fee (%)</label>
   <input type="number" id="fee" placeholder="e.g. 10">
 
+  <!-- 🔥 NEW INPUT -->
+  <label>Target monthly income ($)</label>
+  <input type="number" id="target" placeholder="e.g. 1000">
+
   <button onclick="calculate()">Calculate</button>
 
   <div class="results" id="results">
@@ -129,10 +134,21 @@
     <div class="result-line">Fees: $<span id="fees"></span></div>
     <div class="result-line">Net Profit: $<span id="profit"></span></div>
 
+    <!-- 🔥 NEW -->
+    <div class="result-line">Weekly Profit: $<span id="weekly"></span></div>
+    <div class="result-line">Suggested Price: $<span id="suggestedPrice"></span></div>
+    <div class="result-line">Jobs Needed: <span id="jobsNeeded"></span></div>
+
     <div class="message" id="message"></div>
 
-    <!-- 🔥 NEW INSIGHT SECTION -->
-    <div class="insight" id="insight"></div>
+    <!-- 💰 YOUR ORIGINAL CTA (UNCHANGED) -->
+    <div class="cta">
+      ⚠️ Most people are undercharging and don’t even know it.<br>
+      👉 If your profit is low, you need to raise your price or reduce fees.<br><br>
+
+      🚀 Ready to actually grow your income?<br>
+      <strong>👉 Go back and tap “Start or Grow Your Business”</strong>
+    </div>
   </div>
 </div>
 
@@ -142,6 +158,7 @@ function calculate() {
   const jobs = parseFloat(document.getElementById("jobs").value) || 0;
   const expenses = parseFloat(document.getElementById("expenses").value) || 0;
   const fee = parseFloat(document.getElementById("fee").value) || 0;
+  const target = parseFloat(document.getElementById("target").value) || 1000;
 
   const revenue = price * jobs;
   const fees = revenue * (fee / 100);
@@ -151,41 +168,26 @@ function calculate() {
   document.getElementById("fees").innerText = fees.toFixed(2);
   document.getElementById("profit").innerText = profit.toFixed(2);
 
+  // 🔥 NEW CALCULATIONS
+  const weekly = profit / 4;
+  const suggestedPrice = jobs > 0 ? ((target + expenses) / jobs) / (1 - fee / 100) : 0;
+  const jobsNeeded = price > 0 ? target / (price * (1 - fee / 100)) : 0;
+
+  document.getElementById("weekly").innerText = weekly.toFixed(2);
+  document.getElementById("suggestedPrice").innerText = suggestedPrice.toFixed(2);
+  document.getElementById("jobsNeeded").innerText = Math.ceil(jobsNeeded);
+
   const message = document.getElementById("message");
-  const insight = document.getElementById("insight");
 
   if (profit <= 0) {
     message.innerHTML = "⚠️ You're losing money. Increase your price or reduce expenses.";
     message.className = "message low";
-
-    const breakEvenJobs = expenses / (price - (price * fee / 100));
-
-    insight.innerHTML = `
-      💡 To break even, you need about <strong>${Math.ceil(breakEvenJobs)} jobs/month</strong><br>
-      👉 Or increase your price to stay profitable
-    `;
-
   } else if (profit < 500) {
     message.innerHTML = "⚠️ Profit is low. You are likely undercharging.";
     message.className = "message mid";
-
-    const targetProfit = 1000;
-    const newPrice = ((targetProfit + expenses) / jobs) / (1 - fee / 100);
-
-    insight.innerHTML = `
-      💡 To make $1000/month, you should charge about:<br>
-      <strong>$${newPrice.toFixed(2)} per job</strong><br>
-      👉 Or increase your number of jobs
-    `;
-
   } else {
     message.innerHTML = "✅ Strong profit. Keep going!";
     message.className = "message good";
-
-    insight.innerHTML = `
-      🚀 You're doing well!<br>
-      👉 Keep scaling by increasing jobs or raising prices slightly
-    `;
   }
 
   document.getElementById("results").style.display = "block";
