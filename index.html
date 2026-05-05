@@ -90,17 +90,16 @@
     .good { color: #22c55e; }
     .mid { color: #facc15; }
 
-    .cta {
+    .insight {
       margin-top: 15px;
       font-size: 13px;
       color: #cbd5f5;
     }
 
-    .cta strong {
-      display: block;
-      margin-top: 10px;
+    .insight strong {
       color: #22c55e;
-      font-weight: bold;
+      display: block;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -132,14 +131,8 @@
 
     <div class="message" id="message"></div>
 
-    <!-- 💰 NON-CLICKABLE CTA -->
-    <div class="cta">
-      ⚠️ Most people are undercharging and don’t even know it.<br>
-      👉 If your profit is low, you need to raise your price or reduce fees.<br><br>
-
-      🚀 Ready to actually grow your income?<br>
-      <strong>👉 Go back and tap “Start or Grow Your Business”</strong>
-    </div>
+    <!-- 🔥 NEW INSIGHT SECTION -->
+    <div class="insight" id="insight"></div>
   </div>
 </div>
 
@@ -159,16 +152,40 @@ function calculate() {
   document.getElementById("profit").innerText = profit.toFixed(2);
 
   const message = document.getElementById("message");
+  const insight = document.getElementById("insight");
 
   if (profit <= 0) {
     message.innerHTML = "⚠️ You're losing money. Increase your price or reduce expenses.";
     message.className = "message low";
+
+    const breakEvenJobs = expenses / (price - (price * fee / 100));
+
+    insight.innerHTML = `
+      💡 To break even, you need about <strong>${Math.ceil(breakEvenJobs)} jobs/month</strong><br>
+      👉 Or increase your price to stay profitable
+    `;
+
   } else if (profit < 500) {
     message.innerHTML = "⚠️ Profit is low. You are likely undercharging.";
     message.className = "message mid";
+
+    const targetProfit = 1000;
+    const newPrice = ((targetProfit + expenses) / jobs) / (1 - fee / 100);
+
+    insight.innerHTML = `
+      💡 To make $1000/month, you should charge about:<br>
+      <strong>$${newPrice.toFixed(2)} per job</strong><br>
+      👉 Or increase your number of jobs
+    `;
+
   } else {
     message.innerHTML = "✅ Strong profit. Keep going!";
     message.className = "message good";
+
+    insight.innerHTML = `
+      🚀 You're doing well!<br>
+      👉 Keep scaling by increasing jobs or raising prices slightly
+    `;
   }
 
   document.getElementById("results").style.display = "block";
